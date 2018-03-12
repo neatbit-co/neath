@@ -6,7 +6,9 @@
   "scripts": {
     "clean": "node ./fuse.js clean",
     "start": "node --inspect=9031 ./fuse.js",
-    "build:prod": "node ./fuse.js build:prod"
+    "build:prod": "node ./fuse.js build:prod",
+    "start:container": "docker-compose up",
+    "start:container:prod": "docker-compose -f docker-compose.yml -f docker-compose.production.yml up"
   },
   "repository": {
     "type": "git",

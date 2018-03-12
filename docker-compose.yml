@@ -1,6 +1,29 @@
-app:
-  build: .
-  command: echo 'ready'
-  volumes:
-    - .:/home/node/app
-    - /home/node/app/node_modules
+version: "3"
+services:
+    app:
+        build: .
+        environment:
+            NODE_ENV: development
+        command: nodemon -L -e js,ts,html --watch src --inspect=9031 fuse.js
+        ports:
+            - '3000:3000'
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+        
+    mongodb:
+        image: mongo:3.6.3
+        container_name: "mongodb"
+        environment:
+        - MONGO_DATA_DIR=/data/db
+        - MONGO_LOG_DIR=/dev/null
+        - MONGO_INITDB_ROOT_USERNAME
+        - MONGO_INITDB_ROOT_PASSWORD
+        volumes:
+            - mongodata:/data/db
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+volumes:
+    mongodata:

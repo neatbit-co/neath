@@ -1,7 +1,7 @@
 const { src, task, exec, context } = require("fuse-box/sparky");
 const { FuseBox, QuantumPlugin, HTMLPlugin } = require("fuse-box");
 const rimraf = require("rimraf");
-
+ 
 context(class {
     getConfig() {
         return FuseBox.init({
@@ -21,15 +21,18 @@ context(class {
     }
 })
 
-task("default", ["clean"], async context => {
+task("default", async context => {
     const fuse = context.getConfig();
     fuse.dev({ port: 4445, httpServer: false });
     fuse.bundle("server")
         .watch()
         .instructions("> [index.ts]")
-        .completed((proc) => {        
+        .completed((proc) => {   
+            //proc.start();
             proc.require({
-                close: ({ FuseBox }) => FuseBox.import(FuseBox.mainFile).shutdown()
+                close: ({ FuseBox }) => {
+                    FuseBox.import(FuseBox.mainFile).shutdown();
+                }
             });
         });
 
