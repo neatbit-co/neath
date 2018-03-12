@@ -1,0 +1,6 @@
+app:
+  build: .
+  command: echo 'ready'
+  volumes:
+    - .:/home/node/app
+    - /home/node/app/node_modules
