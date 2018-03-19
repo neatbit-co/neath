@@ -1,5 +1,6 @@
 // Import only what we need from express
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
+import { authenticate } from "passport";
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
@@ -11,6 +12,14 @@ router.get('/', (req: Request, res: Response) => {
     // Reply with a hello world when no name param is provided
     res.send('Hello, World!');
 });
+
+router.get('/secure',
+    // This request must be authenticated using a JWT, or else we will fail
+    authenticate(['jwt'], { session: false }),
+    (req, res) => {
+        res.send('Secure response from ' + JSON.stringify(req.user));
+    }
+);
 
 router.get('/:name', (req: Request, res: Response) => {
     // Extract the name from the request parameters
