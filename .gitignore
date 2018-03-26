@@ -2,3 +2,5 @@
 /node_modules
 /.fusebox
 dist/
+neath.log
+**/*.log

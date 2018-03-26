@@ -4,6 +4,12 @@ import { useGoogle, GoogleController } from "./auth/google";
 import * as passport from "passport";
 import { config, schema } from "./config";
 import { useJwt } from "./auth/jwt";
+import { Connection } from "./database/connection";
+import Logger from "./logger";
+import { errorLogger, clientErrorHandler, errorHandler } from "./utils";
+
+const dbConnection = new Connection();
+dbConnection.start();
 
 useJwt();
 useGoogle();
@@ -15,6 +21,11 @@ app.use(passport.initialize());
 app.use("/", AuthController);
 app.use("/google", GoogleController);
 
+// Error logging and handling
+app.use(errorLogger);
+app.use(clientErrorHandler);
+app.use(errorHandler);
+
 app.listen(port, function () {
-    console.log(`Neath is listening on port ${port}!`)
+    Logger.info(`Neath is listening on port ${port}!`)
 });

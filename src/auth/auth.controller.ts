@@ -1,17 +1,11 @@
 // Import only what we need from express
 import { Router, Request, Response } from "express";
 import { authenticate } from "passport";
+import { TokenGenerator, AccessTokenResponse } from "./token";
+import Logger from "../logger";
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
-
-// The / here corresponds to the route that the AuthController
-// is mounted on in the server.ts file.
-// In this case it's /
-router.get('/', (req: Request, res: Response) => {
-    // Reply with a hello world when no name param is provided
-    res.send('Hello, World!');
-});
 
 router.get('/secure',
     // This request must be authenticated using a JWT, or else we will fail
@@ -21,13 +15,21 @@ router.get('/secure',
     }
 );
 
-router.get('/:name', (req: Request, res: Response) => {
-    // Extract the name from the request parameters
-    let { name } = req.params;
-
-    // Greet the given name
-    res.send(`Hello, ${name}`);
-});
+/**
+ * Refreshes access token.
+ * 
+ * @returns New access token with extended expiration time.
+ */
+router.post("/tokens", (req: Request, res: Response) => {
+    let token = req.query.token;
+    const newToken = TokenGenerator.refreshAccessToken(token);
+    if (!newToken) {
+        Logger.warn("Refreshing access token failed: token could not be validated");
+        res.status(400).send("Invalid access token");
+    } else {
+        res.send(new AccessTokenResponse(newToken));
+    }
+})
 
 // Export the express.Router() instance to be used by server.ts
 export const AuthController: Router = router;

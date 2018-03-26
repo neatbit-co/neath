@@ -1,8 +1,8 @@
 // Import only what we need from express
 import { Router, Request, Response } from "express";
 import { authenticate } from "passport";
-import { generateAccessToken } from "../token";
-import authenticatedHtml from "../../public/authenticated.html";
+import { TokenGenerator } from "../token";
+import authenticatedHtml from "../static/authenticated.html";
 import * as Handlebars from "handlebars";
 
 // Assign router to the express.Router() instance
@@ -10,7 +10,7 @@ const router: Router = Router();
 const authenticatedHtmlTemplate = Handlebars.compile(authenticatedHtml);
 
 const generateUserToken = (req: Request, res: Response) => {
-    const accessToken = generateAccessToken(req.user.id);
+    const accessToken = TokenGenerator.generateAccessToken(req.user as any);
     const renderedView = authenticatedHtmlTemplate({
         token: accessToken
     });
