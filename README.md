@@ -1,12 +1,15 @@
-# fuse-box-express-seed
-This project is to get you started using FuseBox as module loader and bundler with `Node` and `express.js` using `TypeScript`
+# Neath
+Neath is a lightweight Single Sign-On (SSO) API and JWT token provider that:
 
-
+* supports social providers like Facebook, Google and Twitter out of the box
+* supports username and email authentication
+* provides a simple REST API
+* supports multiple applications and custom claims
+* has a web based administrative UI for managing users
+* is simple to configure and run
 
 #### Setup & run
 * `npm install`
 * `npm start`
 
-Visit `http://localhost:3446/`
-
-Don't hesitate to let us know how to improve it :)
+Visit `http://localhost:3000/`

@@ -1,5 +1,6 @@
 const { src, task, exec, context } = require("fuse-box/sparky");
 const { FuseBox, QuantumPlugin, HTMLPlugin } = require("fuse-box");
+const TsNameOfPlugin = require("./ts-nameof-plugin");
 const rimraf = require("rimraf");
  
 context(class {
@@ -11,6 +12,7 @@ context(class {
             sourceMaps: { inline: false, vendor: false }, //Not needed as we are debugging with vscode
             plugins: [
                 HTMLPlugin(),
+                TsNameOfPlugin,
                 this.isProduction && QuantumPlugin({
                     uglify: true,
                     treeshake : true,
@@ -28,12 +30,12 @@ task("default", async context => {
         .watch()
         .instructions("> [index.ts]")
         .completed((proc) => {   
-            //proc.start();
-            proc.require({
+            proc.start();
+            /* proc.require({
                 close: ({ FuseBox }) => {
                     FuseBox.import(FuseBox.mainFile).shutdown();
                 }
-            });
+            }); */
         });
 
     await fuse.run();
